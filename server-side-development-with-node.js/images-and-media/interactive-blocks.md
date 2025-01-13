@@ -2,49 +2,37 @@
 icon: hand-pointer
 ---
 
-# Interactive blocks
+# ข้อดีของ Node
 
-In addition to the default Markdown you can write, GitBook has a number of out-of-the-box interactive blocks you can use. You can find interactive blocks by pressing `/` from within the editor.
+Node มีข้อได้เปรียบที่เป็นเอกลักษณ์หลายประการเมื่อเทียบกับ PHP, Ruby on Rails หรือ ASP.NET
 
-<figure><img src="https://gitbookio.github.io/onboarding-template-images/interactive-hero.png" alt=""><figcaption></figcaption></figure>
+### JavaScript ทุกที่
 
-### Tabs
+การใช้ภาษาเดียวกันทั้งฝั่งไคลเอนต์และเซิร์ฟเวอร์มีประโยชน์หลายประการ:
 
-{% tabs %}
-{% tab title="First tab" %}
-Each tab is like a mini page — it can contain multiple other blocks, of any type. So you can add code blocks, images, integration blocks and more to individual tabs in the same tab block.
-{% endtab %}
+* ประสิทธิภาพการพัฒนาน่าจะสูงขึ้นเมื่อใช้เพียงภาษาเดียวตลอดทั้งโครงการ
+* มีโอกาสในการแบ่งปันและนำโค้ดกลับมาใช้ใหม่มากขึ้นเมื่อใช้เพียงภาษาเดียว
+* JavaScript ได้กลายเป็นภาษาโปรแกรมมิ่งที่ได้รับความนิยมและใช้กันอย่างแพร่หลายที่สุดในโลก ทำให้การจ้างนักพัฒนาที่มีความรู้น่าจะง่ายขึ้น และทีมสรรหาบุคลากรเพียงแค่ต้องทดสอบความรู้ของผู้สมัครในภาษาเดียวเท่านั้น
 
-{% tab title="Second tab" %}
-Add images, embedded content, code blocks, and more.
+### สถาปัตยกรรมแบบ Push
 
-```javascript
-const handleFetchEvent = async (request, context) => {
-    return new Response({message: "Hello World"});
-};
-```
-{% endtab %}
-{% endtabs %}
+Node โดดเด่นอย่างมากในเว็บแอปพลิเคชันแบบ push นี่หมายความว่าอย่างไร?&#x20;
 
-### Expandable sections
+เว็บแอปพลิเคชันที่เราได้ลองทำมาจนถึงตอนนี้ล้วนเป็นแบบ pull ทั้งสิ้น เว็บเซิร์ฟเวอร์จะอยู่ในสถานะว่างจนกว่าคุณจะส่งคำขอ: เราจะเรียกว่าผู้ใช้ดึง (pull) ข้อมูล/บริการจากเซิร์ฟเวอร์ นั่นคือ ผู้ใช้เป็นผู้ควบคุมการส่งคำขอ และหน้าที่ของเซิร์ฟเวอร์คือการตอบสนองต่อคำขอนั้น ในขณะที่ลักษณะการดึงข้อมูล (pull-based) ของเว็บทำงานได้ดี&#x20;
 
-<details>
+แต่ก็มีแอปพลิเคชันบางประเภทที่จำเป็นต้องใช้การผลักข้อมูล (push-based) นั่นคือ บางแอปพลิเคชันต้องผลักข้อมูลจากเซิร์ฟเวอร์ไปยังไคลเอนต์&#x20;
 
-<summary>Click me to expand</summary>
+การโทรศัพท์เป็นแบบ push-based: ระบบโทรศัพท์หลักจะส่งข้อความ (สายเรียกเข้า) ไปยังโทรศัพท์ และโทรศัพท์ก็ตอบสนอง (ด้วยการดังขึ้น)
 
-Expandable blocks are helpful in condensing what could otherwise be a lengthy paragraph. They are also great in step-by-step guides and FAQs.
+ตัวอย่างคลาสสิกของเว็บแอปพลิเคชันแบบ push คือ ฟีเจอร์แชทที่อยู่ภายในหน้าเว็บ ดังแสดงในรูป
 
-</details>
+<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption><p>ตัวอย่าง push เว็บแอพพลิเคชัน</p></figcaption></figure>
 
-### Drawings
+เซิร์ฟเวอร์ต้องตอบสนองต่อข้อความแชทที่เข้ามาโดยส่งต่อไปยังทุกฝ่ายที่กำลังรับฟังในห้องแชท แม้ว่าจะสามารถสร้างแอปพลิเคชันประเภทนี้โดยใช้สภาพแวดล้อมเช่น PHP ได้ แต่โดยทั่วไปแล้วจะต้องใช้การ polling ที่ไม่มีประสิทธิภาพ (นั่นคือ การให้เซิร์ฟเวอร์ "ถาม" ไคลเอนต์ซ้ำๆ ว่ามีอะไรใหม่หรือไม่)&#x20;
 
-<img alt="" class="gitbook-drawing">
+ในทางตรงกันข้าม สภาพแวดล้อม Node เหมาะสมอย่างยิ่งสำหรับการสร้างแอปพลิเคชันประเภทนี้ จริงๆ แล้ว บทช่วยสอนออนไลน์เกี่ยวกับ Node หลายแห่งมักจะสร้างเซิร์ฟเวอร์แชทเป็นตัวอย่างแอปพลิเคชันแรกหลังจากตัวอย่าง "Hello World" ที่เป็นธรรมเนียมปฏิบัติ
 
-### Embedded content
 
-{% embed url="https://www.youtube.com/watch?v=YILlrDYzAm4" %}
 
-{% hint style="info" %}
-GitBook supports thousands of embedded websites out-of-the-box, simply by pasting their links. Feel free to check out which ones[ are supported natively](https://iframely.com).
-{% endhint %}
+
 
