@@ -64,6 +64,6 @@ app.listen(8080, () => { ... });
 
 รูปที่ 7 แสดงสถานการณ์ที่ฟังก์ชันมิดเดิลแวร์สามฟังก์ชันประมวลผลแต่ละคำขอก่อน
 
-<figure><img src="../../.gitbook/assets/image (7).png" alt=""><figcaption><p>รูปที่ 7 ฟังก์ชัน Middleware ใน Express</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (8).png" alt=""><figcaption><p>รูปที่ 7 ฟังก์ชัน Middleware ใน Express</p></figcaption></figure>
 
 ในโค้ดก่อนหน้าที่ใช้ฟังก์ชัน static() พารามิเตอร์แรกของฟังก์ชัน app.use() คือเส้นทางที่ร้องขอ ในขณะที่ฟังก์ชัน express.static() เป็นฟังก์ชันมิดเดิลแวร์สำหรับการให้บริการทรัพยากรแบบสแตติก บรรทัดนั้นจะรับคำขอทั้งหมดสำหรับไฟล์ที่ขึ้นต้นด้วยเส้นทาง /static (เช่น http://www.examplesite.com/static/index.html) และพยายามให้บริการจากโฟลเดอร์ public ของแอปพลิเคชัน

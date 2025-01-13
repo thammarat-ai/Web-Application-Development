@@ -21,7 +21,7 @@ npm install socket.io
 
 รูปที่ 10 แสดงถึงกระแสข้อมูลโดยรวมระหว่างเซิร์ฟเวอร์แชทและไคลเอนต์แชทต่างๆ&#x20;
 
-<figure><img src="../.gitbook/assets/image (10).png" alt=""><figcaption><p>รูปที่ 10 กระแสข้อมูลใช้ Socket.io</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption><p>รูปที่ 10 กระแสข้อมูลใช้ Socket.io</p></figcaption></figure>
 
 
 
@@ -146,7 +146,7 @@ http.listen(7000, () => {
 
 งานของ WebSocket จัดการโดยไลบรารีไคลเอนต์ Socket.io โดยใช้ฟังก์ชัน `emit()` เพื่อส่งข้อความไปยังเซิร์ฟเวอร์ เช่นเดียวกับฟังก์ชัน `emit()` ฝั่งเซิร์ฟเวอร์ คุณสามารถแยกแยะประเภทข้อความที่แตกต่างกันโดยการให้ชื่อข้อความที่แตกต่างกัน ฟังก์ชัน `on()` ใช้เพื่อจัดการข้อความที่ได้รับจากเซิร์ฟเวอร์ (หรือที่ถูกผลักดันไปยังไคลเอนต์) รูปที่ 11 แสดงถึงแอปพลิเคชันในเบราว์เซอร์
 
-<figure><img src="../.gitbook/assets/image (11).png" alt=""><figcaption><p>รูปที่ 11 Chat ในเบราเซอร์</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (12).png" alt=""><figcaption><p>รูปที่ 11 Chat ในเบราเซอร์</p></figcaption></figure>
 
 
 

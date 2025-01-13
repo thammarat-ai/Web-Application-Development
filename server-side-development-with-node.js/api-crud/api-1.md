@@ -8,7 +8,7 @@
 
 ด้วยเหตุนี้ นักพัฒนา API มักใช้เครื่องมือทดสอบ API ของบุคคลที่สาม เช่น **Postman** หรือ **Insomnia** ซึ่งเป็นเครื่องมือยอดนิยม ตัวอย่างในรูปที่ 9 แสดงให้เห็นว่าคุณสามารถระบุ URL endpoint ที่ต้องการทดสอบ ควบคุม HTTP verbs ที่จะใช้ กำหนดค่า `Content-Type` header และป้อนข้อมูลที่ต้องการส่งได้อย่างง่ายดาย
 
-<figure><img src="../../.gitbook/assets/image (9).png" alt=""><figcaption><p>รูปที่ 9 เครื่องมือทดสอบ API</p></figcaption></figure>
+<figure><img src="../../.gitbook/assets/image (10).png" alt=""><figcaption><p>รูปที่ 9 เครื่องมือทดสอบ API</p></figcaption></figure>
 
 #### เปรียบเทียบ Postman และ Insomnia
 

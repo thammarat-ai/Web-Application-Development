@@ -8,7 +8,7 @@ icon: '6'
 
 วิธีการทำงานของ view engine ใน Node.js แสดงไว้ในรูปที่ 12 View engine ช่วยให้นักพัฒนาสามารถสร้างวิวโดยใช้รูปแบบพิเศษที่มีข้อมูลการนำเสนอและไฟล์ JavaScript ซึ่งคล้ายกับไฟล์ PHP ในแง่ที่ว่าพวกมันเป็นผลรวมของมาร์กอัปและโค้ด JavaScript โดยทั่วไปเรียกว่า เทมเพลตหรือวิว
 
-<figure><img src="../.gitbook/assets/image (12).png" alt=""><figcaption><p>รูปที่ 12 View Engines and Node</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/image (13).png" alt=""><figcaption><p>รูปที่ 12 View Engines and Node</p></figcaption></figure>
 
 #### วิธีการทำงานของ View Engine:
 
