@@ -1,5 +1,5 @@
 ---
-icon: image-landscape
+icon: '1'
 ---
 
 # แนะนำ Node.js
