@@ -63,28 +63,19 @@ icon: '6'
 
 
 
-```html
+```ejs
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8">
-  <title>การทดสอบ EJS</title>
-  <link rel="stylesheet" href="/static/list.css" />
+  <title><%= title %></title>
 </head>
 <body>
-  <main>
-    <h1><%= title %></h1>
-    <section class="container">
-      <% for (let p of paintings) { %>
-        <div class="box">
-          <img src="<%= p.filename %>" />
-          <h2><%= p.artist %></h2>
-          <p><%= p.title %> (<%= p.year %>)</p>
-          <button>ดูรายละเอียด</button>
-        </div>
-      <% } %>
-    </section>
-  </main>
+  <h1><%= title %></h1>
+  <ul>
+    <% paintings.forEach(function(painting) { %>
+      <li><%= painting.title %> by <%= painting.artist %></li>
+    <% }); %>
+  </ul>
 </body>
 </html>
 ```

@@ -28,14 +28,27 @@ npm install socket.io
 ตัวอย่างใน Listing 9 แสดงเซิร์ฟเวอร์แชท Node.js ที่เรียบง่าย โมดูล Socket.io จัดการงาน WebSocket ที่แท้จริงให้กับเรา
 
 ```javascript
-const path = require("path");
-const express = require("express");
+import express from "express";
+import { join } from "path";
+import path from "path";
+import { fileURLToPath } from "url";
+import { createServer } from "http";
+import { Server } from "socket.io";
+
+
 const app = express();
-const http = require("http").createServer(app);
-const io = require("socket.io")(http);
+
+// Define __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // จัดการคำขอสำหรับทรัพยากรแบบ static
-app.use("/static", express.static(path.join(__dirname, "public")));
+app.use("/static", express.static(join(__dirname, "public")));
+const httpServer = createServer(app);
+const io = new Server(httpServer);
+
+// จัดการคำขอสำหรับทรัพยากรแบบ static
+app.use("/static", express.static(join(__dirname, "public")));
 
 // ทุกครั้งที่ได้รับคำขอ GET ที่ root ให้ส่งไฟล์ไคลเอนต์แชท
 app.get("/", (req, res) => {
@@ -60,7 +73,7 @@ io.on("connection", (socket) => {
   });
 });
 
-http.listen(7000, () => {
+httpServer.listen(7000, () => {
   console.log("listening on *:7000");
 });
 ```
@@ -84,52 +97,52 @@ http.listen(7000, () => {
 
 ```html
 <head>
-  ...
-  <script src="/socket.io/socket.io.js"></script>
-</head>
-<body>
-  <div class="panel">
-    <div class="panel-header"><h3>แชท</h3></div>
-    <div class="panel-body"><ul id="messages"></ul></div>
-    <div class="panel-footer">
-      <form id="chatForm">
-        <input type="text" id="entry" autocomplete="off" />
-        <button>ส่ง</button>
-      </form>
-    </div>
-  </div>
-  <script>
-    // เริ่มต้นการเชื่อมต่อ WebSocket
-    const socket = io();
     
-    // รับชื่อผู้ใช้แล้วแจ้งให้เซิร์ฟเวอร์
-    let username = prompt("ชื่อผู้ใช้ของคุณคืออะไร?");
-    document.querySelector(".panel-header h3").textContent = "แชท [" + username + "]";
-    socket.emit("username", username);
-
-    // ได้รับข้อความแจ้งเตือนการเชื่อมต่อผู้ใช้ใหม่
-    socket.on("user joined", msg => {
-      const li = document.createElement("li");
-      li.innerHTML = `${msg.user} - ${msg.message}`;
-      document.querySelector("#messages").appendChild(li);
-    });
-
-    // ผู้ใช้ป้อนข้อความใหม่
-    document.querySelector("#chatForm").addEventListener('submit', e => {
-      e.preventDefault();
-      const entry = document.querySelector("#entry");
-      socket.emit("chat from client", entry.value);
-      entry.value = "";
-    });
-
-    // ได้รับข้อความแชทใหม่
-    socket.on("chat from server", msg => {
-      const li = document.createElement("li");
-      li.textContent = msg.user + ": " + msg.message;
-      document.querySelector("#messages").appendChild(li);
-    });
-  </script>
-</body>
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <div class="panel">
+      <div class="panel-header"><h3>แชท</h3></div>
+      <div class="panel-body"><ul id="messages"></ul></div>
+      <div class="panel-footer">
+        <form id="chatForm">
+          <input type="text" id="entry" autocomplete="off" />
+          <button>ส่ง</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      // เริ่มต้นการเชื่อมต่อ WebSocket
+      const socket = io();
+      
+      // รับชื่อผู้ใช้แล้วแจ้งให้เซิร์ฟเวอร์
+      let username = prompt("ชื่อผู้ใช้ของคุณคืออะไร?");
+      document.querySelector(".panel-header h3").textContent = "แชท [" + username + "]";
+      socket.emit("username", username);
+  
+      // ได้รับข้อความแจ้งเตือนการเชื่อมต่อผู้ใช้ใหม่
+      socket.on("user joined", msg => {
+        const li = document.createElement("li");
+        li.innerHTML = `${msg.user} - ${msg.message}`;
+        document.querySelector("#messages").appendChild(li);
+      });
+  
+      // ผู้ใช้ป้อนข้อความใหม่
+      document.querySelector("#chatForm").addEventListener('submit', e => {
+        e.preventDefault();
+        const entry = document.querySelector("#entry");
+        socket.emit("chat from client", entry.value);
+        entry.value = "";
+      });
+  
+      // ได้รับข้อความแชทใหม่
+      socket.on("chat from server", msg => {
+        const li = document.createElement("li");
+        li.textContent = msg.user + ": " + msg.message;
+        document.querySelector("#messages").appendChild(li);
+      });
+    </script>
+  </body>
 ```
 
 **LISTING 10 ไคลเอนต์แชท**
