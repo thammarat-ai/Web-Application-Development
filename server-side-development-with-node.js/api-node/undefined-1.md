@@ -16,6 +16,8 @@ const data = companyProvider.getData();
 
 คุณยังสามารถวางตรรกะตัวจัดการเส้นทางของคุณลงในโมดูลแยกต่างหากได้ Listing 6 แสดงให้เห็นว่าตัวจัดการเส้นทางใน Listing 4 จะมีลักษณะอย่างไรในโมดูล (เราจะบันทึกไว้ในโฟลเดอร์ scripts เป็น company-router.js)
 
+{% tabs %}
+{% tab title="commonjs" %}
 ```javascript
 const fs = require('fs').promises;
 const path = require('path');
@@ -39,11 +41,47 @@ function getData() {
 // ระบุว่าวัตถุใดจะสามารถเข้าถึงได้จากภายนอกโมดูล
 module.exports = { getData };
 ```
+{% endtab %}
+
+{% tab title="module" %}
+```javascript
+import { promises as fs } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Define __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// สำหรับตอนนี้ เราจะรับข้อมูลโดยการอ่านไฟล์ json ที่ให้มา
+const jsonPath = join(__dirname, '../public', 'companies.json');
+
+// รับข้อมูลแบบอะซิงโครนัส
+let companies;
+getCompanyData(jsonPath);
+
+async function getCompanyData(jsonPath) {
+    try {
+        const data = await fs.readFile(jsonPath, "utf-8");
+        companies = JSON.parse(data);
+    } catch (err) { 
+        console.log('เกิดข้อผิดพลาดในการอ่าน ' + jsonPath); 
+    }
+}
+// ระบุว่าวัตถุใดจะสามารถเข้าถึงได้จากภายนอกโมดูล
+export function getData() {
+    return companies;
+}
+```
+{% endtab %}
+{% endtabs %}
 
 LISTING 5 การกำหนดโมดูล
 
 
 
+{% tabs %}
+{% tab title="commonjs" %}
 ```javascript
 // ส่งคืนบริษัททั้งหมด
 const handleAll = (companyProvider, app) => {
@@ -95,12 +133,129 @@ module.exports = {
 };
 ```
 
+
+{% endtab %}
+
+{% tab title="module" %}
+```javascript
+import { promises as fs } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Define __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const jsonPath = join(__dirname, '../public', 'companies.json');
+
+// Define your route handlers
+export function handleAll(getData, app) {
+    app.get('/companies', (req, res) => {
+        const companies = getData();
+        res.json(companies);
+    });
+}
+
+// ส่งคืนบริษัทที่ร้องขอเพียงบริษัทเดียว
+export function handleSingleSymbol(getData, app) {
+    app.get('/company/:symbol', (req, res) => 
+        {
+            const symbol = req.params.symbol.toLowerCase();
+            const companies = getData();
+            const company = companies.find(c => c.symbol.toLowerCase() === symbol);
+          
+            if (company) {
+                res.json(company);
+            } else {
+                res.status(404).send('ไม่พบบริษัทที่มีสัญลักษณ์นี้');
+        }
+    });
+
+    app.put('/company/:symbol', async (req, res) => {
+        const symbol = req.params.symbol.toUpperCase();
+        const updatedCompany = req.body;
+        let companies = getData();
+        const index = companies.findIndex(c => c.symbol.toUpperCase() === symbol);
+        if (index !== -1) {
+            companies[index] = updatedCompany;
+            try {
+                await fs.writeFile(jsonPath, JSON.stringify(companies, null, 2));
+                res.status(200).json(updatedCompany);
+            } catch (err) {
+                res.status(500).send('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            }
+        } else {
+            res.status(404).send('ไม่พบบริษัทที่มีสัญลักษณ์นี้');
+        }
+    });
+
+    app.post('/companies', async (req, res) => {
+        const newCompany = req.body;
+        let companies = getData();
+        companies.push(newCompany);
+        try {
+            await fs.writeFile(jsonPath, JSON.stringify(companies, null, 2));
+            res.status(201).json(newCompany);
+        } catch (err) {
+            res.status(500).send('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        }
+    });
+
+    app.delete('/companies/:symbol', async (req, res) => {
+        const symbol = req.params.symbol.toUpperCase();;
+        let companies = getData();
+        const index = companies.findIndex(c => c.symbol.toUpperCase() === symbol);
+        if (index !== -1) {
+            companies.splice(index, 1);
+            try {
+                await fs.writeFile(jsonPath, JSON.stringify(companies, null, 2));
+                res.status(200).send('ลบบริษัทเรียบร้อยแล้ว');
+            } catch (err) {
+                res.status(500).send('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            }
+        } else {
+            res.status(404).send('ไม่พบบริษัทที่มีสัญลักษณ์นี้');
+        }
+    });
+}
+
+// ส่งคืนบริษัททั้งหมดที่มีชื่อประกอบด้วยข้อความที่ระบุ
+export function handleNameSearch(getData, app) {
+    app.get('/companies/name/:substring', (req, res) => {
+        const substring = req.params.substring.toLowerCase();
+        const companies = getData();
+        const matchingCompanies = companies.filter(company => 
+            company.name.toLowerCase().includes(substring)
+        );
+        if (matchingCompanies.length > 0) {
+            res.json(matchingCompanies);
+        } else {
+            res.status(404).send('ไม่พบบริษัทที่มีชื่อประกอบด้วย substring นี้');
+        }
+    });
+}
+
+
+
+const jsonMessage = (msg) => {
+    return { message: msg };
+};
+
+
+```
+{% endtab %}
+{% endtabs %}
+
+
+
 LISTING 6 ตัวจัดการเส้นทางภายในโมดูล
 
 ตัวจัดการเส้นทางเหล่านี้ในโมดูลจะถูกใช้งานอย่างไร?&#x20;
 
 Listing 7 แสดงให้เห็นถึงสิ่งนี้ และยังแสดงวิธีการใช้งานตัวจัดการเส้นทางเหล่านี้ นอกจากนี้ยังแสดงวิธีการรวมการจัดการไฟล์แบบสแตติกและการจัดการ 404 ที่กำหนดเองสำหรับเส้นทางที่ไม่รู้จัก
 
+{% tabs %}
+{% tab title="commonjs" %}
 ```javascript
 // moudule separate
 const path = require('path');
@@ -130,6 +285,50 @@ app.listen(port, () => {
     console.log(`เซิร์ฟเวอร์กำลังทำงานที่ http://localhost:${port}`);
 });
 ```
+{% endtab %}
+
+{% tab title="module" %}
+```javascript
+// moudule separate
+import express from 'express';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Define __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const { static: serveStatic } = express;
+const app = express();
+
+// อ้างอิงโมดูลของเราเอง
+import { getData } from './scripts/company-provider.js';
+import { handleAll, handleSingleSymbol, handleNameSearch } from './scripts/company-router.js';
+
+// จัดการคำขอสำหรับทรัพยากรแบบสแตติก
+app.use('/static', serveStatic(join(__dirname, 'public')));
+
+
+
+// กำหนดเส้นทางสำหรับการจัดการบริษัท
+handleAll(getData, app);
+handleSingleSymbol(getData, app);
+handleNameSearch(getData, app);
+
+// สำหรับคำขออื่นๆ ให้แสดงข้อผิดพลาด 404
+app.use((req, resp) => {
+    resp.status(404).send('ไม่สามารถค้นหาทรัพยากรที่ร้องขอได้!');
+});
+
+// เริ่มเซิร์ฟเวอร์
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`เซิร์ฟเวอร์กำลังทำงานที่ http://localhost:${port}`);
+});
+
+```
+{% endtab %}
+{% endtabs %}
 
 LISTING 7 เซิร์ฟเวอร์ API สำหรับข้อมูลบริษัท
 
