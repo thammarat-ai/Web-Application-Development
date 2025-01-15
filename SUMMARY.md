@@ -37,4 +37,5 @@
 * [สรุปบท](server-side-development-with-node.js/undefined/README.md)
   * [Key Terms](server-side-development-with-node.js/undefined/key-terms.md)
   * [คำถามทบทวน](server-side-development-with-node.js/undefined/undefined.md)
-  * [Hands-On Practice](server-side-development-with-node.js/undefined/hands-on-practice.md)
+  * [Hands-On Practice](server-side-development-with-node.js/undefined/hands-on-practice/README.md)
+    * [Project 1](server-side-development-with-node.js/undefined/hands-on-practice/project-1.md)
