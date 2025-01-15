@@ -6,30 +6,37 @@
 
 การเพิ่มเส้นทางใหม่เป็นเพียงการเพิ่มการเรียกใช้ `app.get()` สำหรับแต่ละเส้นทาง Listing 4 แสดงการดำเนินการของทั้งสามเส้นทางใน API
 
+
+
 ```javascript
 // ส่งคืนบริษัททั้งหมดเมื่อมีการร้องขอรูท
 app.get('/', (req, resp) => { resp.json(companies) } );
 
-// ส่งคืนบริษัทที่ร้องขอเพียงบริษัทเดียว เช่น /companies/amzn
-app.get('/companies/:symbol', (req, resp) => {
-    // เปลี่ยนสัญลักษณ์ที่ผู้ใช้ระบุให้เป็นตัวพิมพ์ใหญ่
-    const symbolToFind = req.params.symbol.toUpperCase();
-    // ค้นหาในอาร์เรย์ของวัตถุเพื่อหาความตรงกัน
-    const matches = companies.filter(obj => symbolToFind === obj.symbol);
-    // ส่งคืนบริษัทที่ตรงกัน
-    resp.json(matches);
-});
-
+app.get('/company/:symbol', (req, res) => 
+    {
+        const symbol = req.params.symbol.toLowerCase();
+        const companies = getData(); // getData มาจาก company-provider.js
+        const company = companies.find(c => c.symbol.toLowerCase() === symbol);
+      
+        if (company) {
+            res.json(company);
+        } else {
+           res.status(404).send('ไม่พบบริษัทที่มีสัญลักษณ์นี้');
+    }
+ });
+ 
 // ส่งคืนบริษัทที่มีชื่อประกอบด้วยข้อความที่ระบุ เช่น /companies/name/dat
-app.get('/companies/name/:substring', (req, resp) => {
-    // เปลี่ยน substring ที่ผู้ใช้ระบุให้เป็นตัวพิมพ์เล็ก
+app.get('/companies/name/:substring', (req, res) => {
     const substring = req.params.substring.toLowerCase();
-    // ค้นหาในอาร์เรย์ของวัตถุเพื่อหาความตรงกัน
-    const matches = companies.filter((obj) =>
-        obj.name.toLowerCase().includes(substring)
+    const companies = getData();
+    const matchingCompanies = companies.filter(company => 
+        company.name.toLowerCase().includes(substring)
     );
-    // ส่งคืนบริษัทที่ตรงกัน
-    resp.json(matches);
+    if (matchingCompanies.length > 0) {
+        res.json(matchingCompanies);
+    } else {
+        res.status(404).send('ไม่พบบริษัทที่มีชื่อประกอบด้วย substring นี้');
+    }
 });
 ```
 
