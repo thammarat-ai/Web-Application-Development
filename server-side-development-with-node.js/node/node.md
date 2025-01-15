@@ -3,11 +3,35 @@
 สมมติว่าคุณได้ติดตั้ง Node หรือมีสิทธิ์เข้าถึงแล้ว มาสร้างแอปพลิเคชัน Node อย่างง่ายกัน เราจะเริ่มต้นด้วยตัวอย่าง Hello World ตามปกติ สร้างไฟล์ใหม่ ป้อนโค้ดที่แสดงในโค้ด 1 ลงในไฟล์นั้น และบันทึกเป็น hello.js
 
 ```javascript
-// ใช้งานโมดูล http
+// แบบ commonjs
+// ใช้งานโมดูล http 
 const http = require('http');
 
 // กำหนดค่าเซิร์ฟเวอร์ HTTP ให้ตอบกลับด้วยข้อความง่ายๆ สำหรับทุกคำขอ
 const server = http.createServer(function (request, response) {
+    response.writeHead(200, {"Content-Type": "text/plain"});
+    response.write("Hello this is our first node.js application");
+    response.end();
+});
+
+// รับฟังที่พอร์ต 8080 บน localhost
+const port = 8080;
+server.listen(port);
+
+// แสดงข้อความบนเทอร์มินัล
+console.log("Server running at port=" + port);
+```
+
+
+
+```javascript
+// แบบ es module 
+// เพิ่ม "type":"module" ใน package.json
+// ใช้งานโมดูล http
+import { createServer } from 'http';
+
+// กำหนดค่าเซิร์ฟเวอร์ HTTP ให้ตอบกลับด้วยข้อความง่ายๆ สำหรับทุกคำขอ
+const server = createServer(function (request, response) {
     response.writeHead(200, {"Content-Type": "text/plain"});
     response.write("Hello this is our first node.js application");
     response.end();
@@ -47,3 +71,80 @@ node hello.js
 
 <figure><img src="../../.gitbook/assets/image (7).png" alt=""><figcaption><p>รูปที่ 6 Static file server</p></figcaption></figure>
 
+```javascript
+// แบบ es module
+import { createServer } from 'http';
+import { stat, readFile } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
+
+// Define __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const server = createServer((request, response) => {
+    let filename = join(__dirname, request.url);
+
+    // ตรวจสอบว่าเป็นไดเรกทอรีหรือไม่
+    stat(filename, (err, stats) => {
+        if (err) {
+            response.writeHead(500, {"Content-Type": "text/html"});
+            response.write("<h1>500 Error</h1>\n");
+            response.write(err + "\n");
+            response.end();
+            return;
+        }
+
+        if (stats.isDirectory()) {
+            // Serve index.html if the directory is requested
+            filename = join(filename, 'index.html');
+            stat(filename, (err, stats) => {
+                if (err || !stats.isFile()) {
+                    response.writeHead(403, {"Content-Type": "text/html"});
+                    response.write("<h1>403 Forbidden</h1>\n");
+                    response.write("Access to directories is not allowed.\n");
+                    response.end();
+                    return;
+                }
+
+                // อ่านไฟล์และส่งกลับไปหาผู้ใช้
+                readFile(filename, "binary", (err, file) => {
+                    if (err) {
+                        response.writeHead(500, {"Content-Type": "text/html"});
+                        response.write("<h1>500 Error</h1>\n");
+                        response.write(err + "\n");
+                        response.end();
+                        return;
+                    }
+
+                    response.writeHead(200);
+                    response.write(file, "binary");
+                    response.end();
+                });
+            });
+            return;
+        }
+
+        // อ่านไฟล์และส่งกลับไปหาผู้ใช้
+        readFile(filename, "binary", (err, file) => {
+            if (err) {
+                response.writeHead(500, {"Content-Type": "text/html"});
+                response.write("<h1>500 Error</h1>\n");
+                response.write(err + "\n");
+                response.end();
+                return;
+            }
+
+            response.writeHead(200);
+            response.write(file, "binary");
+            response.end();
+        });
+    });
+});
+
+const port = 8080;
+server.listen(port, () => {
+    console.log(`Server running at http://localhost:${port}/`);
+});
+
+```
