@@ -27,6 +27,46 @@ npm install socket.io
 
 ตัวอย่างใน Listing 9 แสดงเซิร์ฟเวอร์แชท Node.js ที่เรียบง่าย โมดูล Socket.io จัดการงาน WebSocket ที่แท้จริงให้กับเรา
 
+{% tabs %}
+{% tab title="commonjs" %}
+```javascript
+const path = require("path");
+const express = require("express");
+const app = express();
+const http = require("http").createServer(app);
+const io = require("socket.io")(http);
+// handle requests for static resources
+app.use("/static", express.static(path.join(__dirname, "public")));
+// every time we receive a root get request, send the chat client
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/chat-client.html");
+});
+// handles all WebSocket events, each client will be given a
+// unique socket
+io.on("connection", (socket) => {
+  // client has sent a username message (message names can be
+  // any valid string)
+  socket.on("username", (msg) => {
+    // save username for this socket
+    socket.username = msg;
+    // broadcast message to all connected clients
+    const obj = { user: socket.username, message: msg };
+    io.emit("user joined", obj);
+  });
+  // client has sent a chat message . . . broadcast it
+  socket.on("chat from client", (msg) => {
+    const obj = { user: socket.username, message: msg };
+    io.emit("chat from server", obj);
+  });
+});
+
+http.listen(7000, () => {
+  console.log("listening on *:7000");
+});
+```
+{% endtab %}
+
+{% tab title="module" %}
 ```javascript
 import express from "express";
 import { join } from "path";
@@ -46,9 +86,6 @@ const __dirname = path.dirname(__filename);
 app.use("/static", express.static(join(__dirname, "public")));
 const httpServer = createServer(app);
 const io = new Server(httpServer);
-
-// จัดการคำขอสำหรับทรัพยากรแบบ static
-app.use("/static", express.static(join(__dirname, "public")));
 
 // ทุกครั้งที่ได้รับคำขอ GET ที่ root ให้ส่งไฟล์ไคลเอนต์แชท
 app.get("/", (req, res) => {
@@ -77,6 +114,8 @@ httpServer.listen(7000, () => {
   console.log("listening on *:7000");
 });
 ```
+{% endtab %}
+{% endtabs %}
 
 **LISTING 9 เซิร์ฟเวอร์แชท (chat-server.js)**
 
