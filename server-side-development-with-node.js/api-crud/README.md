@@ -39,19 +39,23 @@ const handleSingleSymbol = (companyProvider, app) => {
 
 ```javascript
 app.put('/companies/:symbol', (req, resp) => {
-  const companies = companyProvider.getData();
-  const symbolToUpd = req.params.symbol.toUpperCase();
-  // หาบริษัท
-  let indx = companies.findIndex(c => c.symbol == symbolToUpd);
-  // หากไม่พบ ให้ส่งกลับข้อความ
-  if (indx < 0) {
-    resp.json(jsonMessage(`${symbolToUpd} not found`));
-  } else {
-    // พบสัญลักษณ์แล้ว จึงแทนที่ด้วยข้อมูลในคำขอ
-    companies[indx] = req.body;
-    // แจ้งให้ผู้ร้องขอรู้ว่าสำเร็จ
-    resp.json(jsonMessage(`${symbolToUpd} updated`));
-  }
+
+const symbol = req.params.symbol.toUpperCase();
+        const updatedCompany = req.body;
+        let companies = getData();
+        const index = companies.findIndex(c => c.symbol.toUpperCase() === symbol);
+        if (index !== -1) {
+            companies[index] = updatedCompany;
+            try {
+                await fs.writeFile(jsonPath, JSON.stringify(companies, null, 2));
+                res.status(200).json(updatedCompany);
+            } catch (err) {
+                res.status(500).send('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+            }
+        } else {
+            res.status(404).send('ไม่พบบริษัทที่มีสัญลักษณ์นี้');
+        }
+
 });
 
 ```
