@@ -21,6 +21,10 @@ BUILD=development
 
 ภายในแอปพลิเคชัน Node ของคุณ คุณสามารถอ้างอิงค่าในไฟล์นี้โดยใช้แพ็คเกจ dotenv ดังที่แสดงในตัวอย่างต่อไปนี้:
 
+
+
+{% tabs %}
+{% tab title="commonjs" %}
 ```javascript
 // ใช้งานแพ็คเกจ dotenv
 require('dotenv').config();
@@ -29,5 +33,18 @@ require('dotenv').config();
 console.log("build type=" + process.env.BUILD);
 server.listen(process.env.PORT);
 ```
+{% endtab %}
+
+{% tab title="es module" %}
+```javascript
+// ใช้งานแพ็คเกจ dotenv
+import dotenv from 'dotenv'
+
+// อ้างอิงค่าจากไฟล์ .env
+console.log("build type=" + process.env.BUILD);
+server.listen(process.env.PORT);
+```
+{% endtab %}
+{% endtabs %}
 
 เป็นเรื่องปกติที่จะเก็บข้อมูลที่ละเอียดอ่อน เช่น API keys และค่าลับในไฟล์ .env นี้ ดังนั้นคุณมักจะต้องเพิ่ม .env ลงในไฟล์ .gitignore ของคุณเพื่อไม่ให้ข้อมูลนี้ถูกผลักไปยังที่เก็บสาธารณะโดยไม่ตั้งใจ
