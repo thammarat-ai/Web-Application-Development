@@ -10,6 +10,10 @@ npm install express
 
 เมื่อคุณทำเช่นนั้นแล้ว คุณเพียงแค่ต้องเพิ่มการเรียกใช้ require() ที่เหมาะสม แล้วคุณก็สามารถเริ่มใช้งาน Express ได้ เวอร์ชัน Express ที่เทียบเท่า (เกือบ) กับเซิร์ฟเวอร์ไฟล์ในรูปที่ 6 สามารถดูได้ใน Listing 2
 
+
+
+{% tabs %}
+{% tab title="แบบ commonjs" %}
 ```javascript
 const path = require("path");
 const express = require("express");
@@ -36,6 +40,51 @@ app.listen(8080, () => {
   console.log("ตัวอย่างเซิร์ฟเวอร์ไฟล์ express กำลังรับฟังที่พอร์ต 8080");
 });
 ```
+{% endtab %}
+
+{% tab title="แบบ es module" %}
+```javascript
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const app = express();
+
+// Define __dirname for ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Route for the root URL
+app.get('/', (req, resp) => {
+    resp.send('Welcome to the Express File Server!');
+  });
+
+app.get('/file/:filename', (req, resp) => {
+  const options = {
+    root: path.join(__dirname, 'public'),
+    dotfiles: 'deny',
+    headers: {
+      'x-timestamp': Date.now(),
+      'x-sent': true
+    }
+  };
+
+  resp.sendFile(req.params.filename, options, (err) => {
+    if (err) {
+      console.log(err);
+      resp.status(404).send("ไม่พบไฟล์");
+    } else {
+      console.log("ส่งแล้ว:", req.params.filename);
+    }
+  });
+});
+
+app.listen(8080, () => {
+  console.log("ตัวอย่างเซิร์ฟเวอร์ไฟล์ express กำลังรับฟังที่พอร์ต 8080");
+});
+```
+{% endtab %}
+{% endtabs %}
 
 LISTING 2 เวอร์ชัน Express ของเซิร์ฟเวอร์ไฟล์
 
