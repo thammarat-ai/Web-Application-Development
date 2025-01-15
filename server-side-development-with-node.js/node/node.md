@@ -2,6 +2,10 @@
 
 สมมติว่าคุณได้ติดตั้ง Node หรือมีสิทธิ์เข้าถึงแล้ว มาสร้างแอปพลิเคชัน Node อย่างง่ายกัน เราจะเริ่มต้นด้วยตัวอย่าง Hello World ตามปกติ สร้างไฟล์ใหม่ ป้อนโค้ดที่แสดงในโค้ด 1 ลงในไฟล์นั้น และบันทึกเป็น hello.js
 
+
+
+{% tabs %}
+{% tab title="แบบ commonjs" %}
 ```javascript
 // แบบ commonjs
 // ใช้งานโมดูล http 
@@ -21,9 +25,9 @@ server.listen(port);
 // แสดงข้อความบนเทอร์มินัล
 console.log("Server running at port=" + port);
 ```
+{% endtab %}
 
-
-
+{% tab title="แบบ es module" %}
 ```javascript
 // แบบ es module 
 // เพิ่ม "type":"module" ใน package.json
@@ -44,6 +48,8 @@ server.listen(port);
 // แสดงข้อความบนเทอร์มินัล
 console.log("Server running at port=" + port);
 ```
+{% endtab %}
+{% endtabs %}
 
 Listing 1 Hello World ใน Node
 
@@ -69,8 +75,16 @@ node hello.js
 
 รูปที่ 6 แสดงตัวอย่างที่ซับซ้อนขึ้นเล็กน้อย: เซิร์ฟเวอร์ไฟล์แบบสแตติก มันตอบสนองต่อคำขอ HTTP สำหรับไฟล์โดยตรวจสอบว่าไฟล์นั้นมีอยู่หรือไม่ หากไม่มี มันจะส่งเนื้อหา 404 ที่เหมาะสมกลับไปยังผู้ร้องขอ หากมีอยู่ มันจะส่งเนื้อหาของไฟล์ที่ร้องขอกลับไป นี่คือเวอร์ชันอย่างง่ายของ Apache หรือ IIS ของคุณเอง!
 
+
+
+{% tabs %}
+{% tab title="commonjs" %}
 <figure><img src="../../.gitbook/assets/image (7).png" alt=""><figcaption><p>รูปที่ 6 Static file server</p></figcaption></figure>
 
+
+{% endtab %}
+
+{% tab title="es module" %}
 ```javascript
 // แบบ es module
 import { createServer } from 'http';
@@ -148,3 +162,5 @@ server.listen(port, () => {
 });
 
 ```
+{% endtab %}
+{% endtabs %}
