@@ -8,6 +8,12 @@
 
 
 
+{% content-ref url="project-1.md" %}
+[project-1.md](project-1.md)
+{% endcontent-ref %}
+
+
+
 ## Project 2
 
 ระดับความยาก: ระดับกลาง
