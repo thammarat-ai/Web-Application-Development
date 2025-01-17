@@ -1,3 +1,9 @@
+---
+cover: >-
+  https://images.unsplash.com/photo-1544383835-bda2bc66a55d?crop=entropy&cs=srgb&fm=jpg&ixid=M3wxOTcwMjR8MHwxfHNlYXJjaHw3fHxkYnxlbnwwfHx8fDE3MzcxMjY4MjJ8MA&ixlib=rb-4.0.3&q=85
+coverY: 0
+---
+
 # วัตถุประสงค์
 
 ในบทนี้เราจะเรียนรู้
