@@ -40,3 +40,4 @@
   * [Hands-On Practice](server-side-development-with-node.js/undefined/hands-on-practice/README.md)
     * [Project 1](server-side-development-with-node.js/undefined/hands-on-practice/project-1.md)
     * [Project 2](server-side-development-with-node.js/undefined/hands-on-practice/project-2.md)
+    * [Project 3](server-side-development-with-node.js/undefined/hands-on-practice/project-3.md)
