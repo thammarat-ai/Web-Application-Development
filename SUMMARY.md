@@ -48,7 +48,7 @@
 * [ฐานข้อมูลและการพัฒนาเว็บ](undefined/undefined-1/README.md)
   * [บทบาทของฐานข้อมูลในการพัฒนาเว็บ](undefined/undefined-1/undefined.md)
 * [การจัดการฐานข้อมูล](undefined/undefined-2/README.md)
-  * [อินเตอร์เฟส แบบ Command-Line](undefined/undefined-2/command-line.md)
+  * [อินเตอร์เฟสแบบคอมมานด์ไลน์ (Command-Line Interface)](undefined/undefined-2/command-line-interface.md)
   * [phpMyAdmin](undefined/undefined-2/phpmyadmin.md)
   * [DBeaver](undefined/undefined-2/dbeaver.md)
   * [SQLite Tools](undefined/undefined-2/sqlite-tools.md)
